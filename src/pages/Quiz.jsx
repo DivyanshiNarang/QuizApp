@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import PropTypes from 'prop-types'
 import { CircularProgress } from "@mui/material";
 import Question from "../components/Question";
+import { decode } from "html-entities";
 
 const Quiz = ({ name, score, questions, setScore }) => {
     const [options, setOptions] = useState();
@@ -33,7 +34,7 @@ const Quiz = ({ name, score, questions, setScore }) => {
             ) : (
                 <>
                     <div className="quizInfo">
-                        <span>{questions[currQues]?.category}</span>
+                        <span>{decode(questions[currQues]?.category)}</span>
                         <span>Score: {score}</span>
                     </div>
                     <Question currQues={currQues} setCurrQues={setCurrQues} questions={questions} options={options} score={score} setScore={setScore} correct={questions[currQues].correct_answer} />

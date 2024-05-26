@@ -1,35 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types'
 import ErrorMessage from '../components/ErrorMessage'
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { decode } from 'html-entities';
 
 const Question = ({ currQues, questions, options, correct, score, setCurrQues, setScore }) => {
     const navigate = useNavigate();
     const [selected, setSelected] = useState();
     const [error, setError] = useState(false);
-    const [quest, setQuest] = useState("");
-    console.log(correct);
-    useEffect(() => {
-        setQuest(convertHTMLtoStr(questions[currQues].question));
-    }, [currQues, questions])
-
-    const convertHTMLtoStr = (str) => {
-        const symbols = {
-            "&amp;": "&",
-            "&lt;": "<",
-            "&gt;": ">",
-            "&quot;": "\"",
-            "&apos;": "'",
-        }
-        for (const symbol in symbols) {
-            if (str.indexOf(symbol) >= 0) {
-                const newStr = str.replaceAll(symbol, symbols[symbol])
-                return newStr
-            }
-        }
-        return str;
-    }
 
     const handleSelect = (i) => {
         if (selected === i && selected === correct) {
@@ -71,12 +50,12 @@ const Question = ({ currQues, questions, options, correct, score, setCurrQues, s
         <div className='question'>
             <h1>Question {currQues + 1}</h1>
             <div className='question-box'>
-                <h2>{quest}</h2>
+                <h2>{decode(questions[currQues].question)}</h2>
                 <div className='options'>
                     {error && <ErrorMessage>{error}</ErrorMessage>}
                     {options &&
                         (options.map(i => (
-                            <button key={i} onClick={() => { handleCheck(i) }} className={`option-box ${selected && handleSelect(i)}`} disabled={selected}>{i}</button>
+                            <button key={i} onClick={() => { handleCheck(i) }} className={`option-box ${selected && handleSelect(i)}`} disabled={selected}>{decode(i)}</button>
                         )))}
                 </div>
                 <div className='controls'>
